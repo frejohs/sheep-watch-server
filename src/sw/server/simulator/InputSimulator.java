@@ -1,25 +1,21 @@
 package sw.server.simulator;
 
 import sw.server.Message;
-import sw.server.Server;
+import sw.server.MessageBuffer;
 
-public class InputSimulator {
+public class InputSimulator implements Runnable {
 
-	private boolean run;
-	private Server server;
+	volatile private boolean run;
+	private volatile MessageBuffer buffer;
 
-	public void main(String[] args) {
-		InputSimulator sim = new InputSimulator();
-		sim.run();
-
+	public InputSimulator(MessageBuffer buffer) {
+		this.buffer = buffer;
 	}
 
 	public void run() {
 		run = true;
-		server = new Server();
 		while (run) {
-
-			server.processMessage(generateMessage());
+//			buffer.put(generateMessage());
 
 			try {
 				Thread.sleep((int) (Math.random() * 10 * 3000));
@@ -30,15 +26,15 @@ public class InputSimulator {
 		}
 
 	}
-	
+
 	public void stop() {
 		run = false;
 	}
-	
+
 	private Message generateMessage() {
 		// TODO
 		return null;
-		
+
 	}
 
 }
