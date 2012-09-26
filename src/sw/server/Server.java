@@ -6,6 +6,11 @@ public class Server implements Runnable {
 
 	private volatile boolean run;
 	private volatile MessageBuffer buffer = new MessageBuffer();
+	private ServerCLI ui;
+	
+	public Server(ServerCLI ui) {
+		this.ui = ui;
+	}
 
 	public void run() {
 		run = true;

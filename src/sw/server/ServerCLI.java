@@ -18,6 +18,8 @@ public class ServerCLI {
 	}
 
 	public void run() {
+		server = new Server(this);
+		simulator = new InputSimulator(this, server.getBuffer());
 		startServer();
 		startSimulator();
 
@@ -26,49 +28,67 @@ public class ServerCLI {
 		Scanner scanner = new Scanner(System.in);
 		run = true;
 		while (run) {
-			System.out.print("sheepwatch:> ");
-			String str = scanner.next();
+			prompt();
+			String str = scanner.nextLine();
 			if (str.equals("server start")) {
 				if (!serverThread.isAlive())
-					serverThread.start();
+					startServer();
 			} else if (str.equals("server stop")) {
-				if (serverThread.isAlive()) {
-					serverThread.interrupt();
-					server.stop();
-				}
-
+				if (serverThread.isAlive())
+					stopServer();
 			} else if (str.equals("sim start")) {
-				if (!simThread.isAlive()) {
-					simThread.start();
-				}
-
+				if (!simThread.isAlive())
+					startSimulator();
 			} else if (str.equals("sim stop")) {
-				if (simThread.isAlive()) {
-					simThread.interrupt();
-					simulator.stop();
-				}
+				if (simThread.isAlive())
+					stopSimulator();
 			} else if (str.equals("exit") && str.equals("quit")) {
+				stopServer();
 				run = false;
 			} else if (str.equals("help")) {
 
-			} else {
-				System.out.println("invalid command, try 'help' for help.");
 			}
+
+			else
+				System.out.println("invalid command, try 'help' for help.");
+
 		}
 	}
 
+	private void prompt() {
+		System.out.print("sheepwatch:> ");
+	}
+
+	public void print(String msg) {
+		System.out.println(msg);
+	}
+
 	public void startServer() {
-		server = new Server();
+		print("Starting server...");
 		serverThread = new Thread(server);
 		serverThread.setDaemon(true);
 		serverThread.start();
 	}
 
 	public void startSimulator() {
-		simulator = new InputSimulator(server.getBuffer());
-		simThread = new Thread(simulator);
-		simThread.setDaemon(true);
-		simThread.start();
+		if (serverThread.isAlive()) {
+			print("Starting simulator...");
+			simThread = new Thread(simulator);
+			simThread.setDaemon(true);
+			simThread.start();
+		}
+	}
 
+	public void stopServer() {
+		stopSimulator();
+		print("Stopping server...");
+		serverThread.interrupt();
+		server.stop();
+	}
+
+	public void stopSimulator() {
+		print("Stopping simulator...");
+		simThread.interrupt();
+		simulator.stop();
 	}
 }

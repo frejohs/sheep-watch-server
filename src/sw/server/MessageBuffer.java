@@ -13,7 +13,8 @@ public class MessageBuffer {
 			message = buffer.take();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("interrupt");
+//			e.printStackTrace();
 		}
 		return message;
 	}
@@ -23,7 +24,7 @@ public class MessageBuffer {
 			buffer.put(message);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
