@@ -1,5 +1,8 @@
 package sw.server;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.Scanner;
 
 import sw.server.simulator.InputSimulator;
@@ -14,7 +17,11 @@ public class ServerCLI {
 
 	public static void main(String[] args) {
 		ServerCLI sc = new ServerCLI();
+//		sc.init();
 		sc.run();
+	}
+	public void init(){
+		connectToDB();
 	}
 
 	public void run() {
@@ -90,5 +97,31 @@ public class ServerCLI {
 		print("Stopping simulator...");
 		simThread.interrupt();
 		simulator.stop();
+	}
+	public void connectToDB(){
+		String dbURL="";
+		try{
+		Statement stmt;
+		//Register the JDBC driver for MySQL.
+		 Class.forName("com.mysql.jdbc.Driver");
+		 
+		//Define URL of database server
+		 String url="jdbc:mysql:"+dbURL;
+		 
+		 //setting up connection to DB
+		 String user ="";
+		 String pw = "";
+		 Connection con = DriverManager.getConnection(url,user,pw);
+		 
+		 //Get a Statement object
+		 stmt = con.createStatement();
+		 
+		 //execute
+		 stmt.executeUpdate("INSERT something INTO something");
+		 
+		 con.close();
+		}
+		catch(Exception e){
+		}
 	}
 }
