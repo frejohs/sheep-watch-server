@@ -6,8 +6,8 @@ public class Message {
 		UPDATE, ALARM
 	};
 
-	private final int messageId;
-	private final int sheepId;
+	private final long messageId;
+	private final long sheepId;
 	private final MessageType type;
 	private final int timeSent;
 	private final int timeReceived;
@@ -15,8 +15,8 @@ public class Message {
 	private final int pulse;
 	private final double temperature;
 
-	public Message(int messageId, int sheepId, MessageType type, int timeSent,
-			int timeReceived, GpsData gpsData, int pulse, double temperature) {
+	public Message(long messageId, long sheepId, MessageType type, int timeSent, int timeReceived, GpsData gpsData,
+			int pulse, double temperature) {
 		super();
 		this.messageId = messageId;
 		this.sheepId = sheepId;
@@ -28,11 +28,11 @@ public class Message {
 		this.temperature = temperature;
 	}
 
-	public int getMessageId() {
+	public long getMessageId() {
 		return messageId;
 	}
 
-	public int getSheepId() {
+	public long getSheepId() {
 		return sheepId;
 	}
 
