@@ -2,6 +2,7 @@ package sw.server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Scanner;
 
@@ -98,10 +99,10 @@ public class ServerCLI {
 		simThread.interrupt();
 		simulator.stop();
 	}
-	public void connectToDB(){
+	public void sendToDB(Message message){
 		String dbURL="";
 		try{
-		Statement stmt;
+		PreparedStatement pstmt;
 		//Register the JDBC driver for MySQL.
 		 Class.forName("com.mysql.jdbc.Driver");
 		 
@@ -114,10 +115,18 @@ public class ServerCLI {
 		 Connection con = DriverManager.getConnection(url,user,pw);
 		 
 		 //Get a Statement object
-		 stmt = con.createStatement();
+		 pstmt = con.prepareStatement("INSERT INTO message(messageid,sheepid,messagetype,timesent,timereceived,location,pulse,temprature) VALUES (?,?)");
 		 
+		 pstmt.setLong(0,message.getMessageId());
+		 pstmt.setLong(1, message.getSheepId());
+		 pstmt.setString(2,message.getType().toString());
+		 pstmt.setInt(3,message.getTimeSent());
+		 pstmt.setInt(4,message.getTimeReceived());
+		 pstmt.setString(5,message.getGpsData().toString());
+		 pstmt.setInt(6, message.getPulse());
+		 pstmt.setDouble(7, message.getTemperature());
 		 //execute
-		 stmt.executeUpdate("INSERT something INTO something");
+		 pstmt.executeUpdate("INSERT something INTO something");
 		 
 		 con.close();
 		}
